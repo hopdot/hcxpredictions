@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; connect-src 'self' https:;">
+<title>HCX 2028 Presidential Prediction</title>
+<style>body{font-family:system-ui;margin:0;background:#f5f7fb;color:#172033}header{background:#172554;color:#fff;padding:28px;text-align:center}.wrap{max-width:900px;margin:auto;padding:18px}.card{background:#fff;padding:20px;margin:16px 0;border-radius:14px;box-shadow:0 3px 14px #0001}.warn{border-left:5px solid #d97706;background:#fffbeb}.cand{border:1px solid #ddd;border-radius:10px;padding:14px;margin:10px 0}.bar{height:12px;background:#e5e7eb;border-radius:8px;margin-top:8px}.fill{height:100%;background:#2563eb;border-radius:8px}button{padding:12px 18px;border:0;border-radius:8px;cursor:pointer;background:#2563eb;color:white;font-weight:700}button:disabled{opacity:.5}footer{text-align:center;padding:25px;color:#667085}</style>
+</head><body>
+<header><h1>🇺🇸 2028 U.S. Presidential Prediction</h1><p>HCX Web3 Election Simulation</p></header>
+<div class="wrap">
+<div class="card warn"><b>Simulation only.</b> This is not an official U.S. government ballot, voter-registration system, or legally recognized election. Candidate names and prediction percentages are illustrative/current-market data and must not be treated as official ballot access or election results.</div>
+<div class="card"><h2>Prediction Snapshot</h2><p>September 2026 market snapshot:</p><div id="predictions"></div></div>
+<div class="card"><h2>Web3 Demonstration Ballot</h2><p>Connect a wallet, select one entry, and record a local demonstration vote. This browser-only control is not sufficient for a real election.</p><button id="connect">Connect Wallet</button><p id="wallet">Wallet: not connected</p><form id="ballot"></form><button id="submit" disabled>Submit Simulation Vote</button><p id="status"></p></div>
+<div class="card"><h2>Security Architecture</h2><ul><li>Smart-contract one-vote invariant for the demo contract</li><li>OpenZeppelin access control</li><li>Slither static analysis and Echidna fuzz testing</li><li>HTTPS and Content Security Policy</li><li>Production election identity and eligibility must remain separate from a public wallet address</li></ul></div>
+</div><footer>HCX • Educational Web3 prototype • Not an official election system</footer>
+<script>
+const candidates=[['JD Vance',24.2],['Alexandria Ocasio-Cortez',13.2],['Jon Ossoff',11.8],['Marco Rubio',8.8],['Gavin Newsom',7.8]];
+const p=document.getElementById('predictions'), b=document.getElementById('ballot');
+candidates.forEach(([name,pct],i)=>{p.insertAdjacentHTML('beforeend',`<div class="cand"><b>${name}</b> — ${pct}%<div class="bar"><div class="fill" style="width:${pct}%"></div></div></div>`);b.insertAdjacentHTML('beforeend',`<div class="cand"><label><input type="radio" name="candidate" value="${i}" required> ${name}</label></div>`)});
+let account=null;
+document.getElementById('connect').onclick=async()=>{if(!window.ethereum){alert('Install a compatible Web3 wallet for the demonstration.');return}try{const a=await window.ethereum.request({method:'eth_requestAccounts'});account=a[0];document.getElementById('wallet').textContent='Wallet: '+account;document.getElementById('submit').disabled=!!localStorage.getItem('hcx2028:'+account)}catch(e){document.getElementById('status').textContent='Wallet connection cancelled or failed.'}};
+document.getElementById('submit').onclick=()=>{const selected=document.querySelector('input[name=candidate]:checked');if(!account||!selected)return;const key='hcx2028:'+account;if(localStorage.getItem(key)){document.getElementById('status').textContent='This wallet already submitted a simulation vote.';return}localStorage.setItem(key,'1');document.getElementById('submit').disabled=true;document.getElementById('status').textContent='Simulation recorded for '+candidates[Number(selected.value)][0]+'. No official vote was cast.'};
+</script></body></html>
